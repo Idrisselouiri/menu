@@ -1,31 +1,44 @@
 import React, { useState } from "react";
-import { Categories } from "./assets/components/Categories";
-import { Menu } from "./assets/components/Menu";
-import products from "./assets/data/products";
-const allCategories = [
-  "all",
-  ...new Set(products.map((item) => item.category)),
-];
+import text from "./lorem";
 
 export const App = () => {
-  const [items, setItems] = useState(products);
-  const [categories, setCategories] = useState(allCategories);
-
-  const filtringItems = (category) => {
-    if (category === "all") {
-      setItems(products);
-      return;
+  // state
+  const [count, setCount] = useState(0);
+  const [data, setData] = useState([]);
+  //handle submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    let amount = parseInt(count);
+    if (amount <= 0) {
+      amount = 0;
     }
-    const newItems = products.filter((pr) => pr.category === category);
-    setItems(newItems);
+    if (amount > 8) {
+      amount = 8;
+    }
+    setData(text.slice(0, amount));
   };
+
   return (
     <section className="section">
-      <div className="title-menu">
-        <h1>Our Menu</h1>
+      <h2>tired of boring lorem ipsum?</h2>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="amount">paragraphs:</label>
+        <input
+          type="number"
+          value={count}
+          onChange={(e) => setCount(e.target.value)}
+        />
+        <button>Generate</button>
+      </form>
+      <div className="conatiner-paraghraphe">
+        {data.map((d, i) => {
+          return (
+            <p className="paraghraphe" key={i}>
+              {d}
+            </p>
+          );
+        })}
       </div>
-      <Categories categories={categories} filtringItems={filtringItems} />
-      <Menu items={items} />
     </section>
   );
 };
